@@ -77,7 +77,7 @@ async def test_update_note(client, session, user):
     assert updated_note["content"] == update_data.content
 
 
-@pytest.mark.skip("failed as warning")
+# @pytest.mark.skip("failed as warning")
 @pytest.mark.asyncio
 async def test_delete_note(client, session, user):
     note_data = NoteCreate(title="Test Note", content="This is a test note.")
@@ -91,7 +91,7 @@ async def test_delete_note(client, session, user):
     response = client.get(f"/notes/{note.id}")
     assert response.status_code == 404
 
-@pytest.mark.skip("failed as warning")
+# @pytest.mark.skip("failed as warning")
 @pytest.mark.asyncio
 async def test_get_notes_analytics(client):
     response = client.get("api/notes/analytics/stats")
