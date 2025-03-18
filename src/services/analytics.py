@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from sqlalchemy.orm import Session
 
 from src.database import models
-from src.schemas import NoteAnalytics, Note
+from src.schemas import NoteAnalytics
 
 nltk.download("punkt")
 nltk.download("stopwords")
@@ -61,7 +61,6 @@ class AnalyticsService:
         return [
             word for word in tokens if word.isalnum() and word not in self.stop_words
         ]
-
 
     def _get_most_common_words(
         self, words: List[str], top_n: int = 10

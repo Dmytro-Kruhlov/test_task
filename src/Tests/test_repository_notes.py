@@ -65,7 +65,7 @@ async def test_update_note(session):
 
 
 @pytest.mark.asyncio
-async def test_delete_note(client, session):
+async def test_delete_note(session):
     note_data = NoteCreate(title="Test Note", content="This is a test note.")
     note = await create_note(note_data, user_id=1, db=session)
 
@@ -77,7 +77,7 @@ async def test_delete_note(client, session):
 
 
 @pytest.mark.asyncio
-async def test_create_version(client, session):
+async def test_create_version(session):
     note_data = NoteCreate(title="Test Note", content="This is a test note.")
     note = await create_note(note_data, user_id=1, db=session)
 
@@ -88,7 +88,7 @@ async def test_create_version(client, session):
 
 
 @pytest.mark.asyncio
-async def test_get_latest_version_number(client, session):
+async def test_get_latest_version_number(session):
     note_data = NoteCreate(title="Test Note", content="This is a test note.")
     note = await create_note(note_data, user_id=1, db=session)
 
@@ -99,7 +99,7 @@ async def test_get_latest_version_number(client, session):
 
 
 @pytest.mark.asyncio
-async def test_get_note_versions(client, session):
+async def test_get_note_versions(session):
     note_data = NoteCreate(title="Test Note", content="This is a test note.")
     note = await create_note(note_data, user_id=1, db=session)
 
