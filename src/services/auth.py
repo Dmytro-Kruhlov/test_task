@@ -13,6 +13,7 @@ from src.conf import messages
 from src.database.db import get_db
 from src.repository import users as repository_users
 from src.conf.config import settings
+from src.database.db import redis_db
 
 
 class Auth:
@@ -20,7 +21,9 @@ class Auth:
     SECRET_KEY = settings.secret_key
     ALGORITHM = settings.algorithm
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
-    redis_db = redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0)
+
+    def __init__(self, redis_client):
+        self.redis_db = redis_client
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -79,13 +82,18 @@ class Auth:
             )
 
     async def ban_token(self, access_token):
-        await self.redis_db.setex(access_token, 3600, access_token)
+        try:
+            await self.redis_db.setex(access_token, 3600, access_token)
+        except redis.RedisError as e:
+            print(f"Error banning token: {e}")
 
     async def banned_token(self, access_token):
-        token = await self.redis_db.get(access_token)
-        if token:
-            return True
-        return False
+        try:
+            token = await self.redis_db.get(access_token)
+            return token is not None
+        except redis.RedisError as e:
+            print(f"Error checking banned token: {e}")
+            return False
 
     async def get_current_user(
         self, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
@@ -120,4 +128,4 @@ class Auth:
         return user
 
 
-auth_service = Auth()
+auth_service = Auth(redis_db)

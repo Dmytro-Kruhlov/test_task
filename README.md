@@ -94,13 +94,14 @@ This project is an AI-Enhanced Notes Management System built using FastAPI, SQLA
 5. **Run the application**:
    You can run the application using:
    ```bash
+   poetry run alembic upgrade head
    poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-   ```
-
 6. **Using Docker**:
    If you prefer to use Docker, you can build and run the containers using:
    ```bash
    docker-compose up --build
+   docker-compose exec web poetry run alembic upgrade head
+
    ```
 
 ## API Endpoints
